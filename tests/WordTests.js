@@ -3,7 +3,7 @@ const exp = require("constants");
 //import a BDD style assertion library
 const expect = require("chai").expect;
 //import the Word module
-const Word = require("../Word");
+const Word = require("../library/Word");
 
 //create a test suite called "Spelling Bee App Tests"
 describe("Word Tests", function() {

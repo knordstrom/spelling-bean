@@ -3,8 +3,8 @@ const exp = require("constants");
 //import a BDD style assertion library
 const expect = require("chai").expect;
 //import the SpellingBee module
-const SpellingBee = require("../SpellingBee").SpellingBee;
-const Word = require("../Word");
+const SpellingBee = require("../library/SpellingBee").SpellingBee;
+const Word = require("../library/Word");
 
 //create a test suite called "Spelling Bee App Tests"
 describe("SpellingBee Tests", function() {

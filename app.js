@@ -4,7 +4,7 @@
 // In this case, the key is the word and the value is the word
 // The map is used to check if a word is in the dictionary
 
-const SpellingBee = require('./SpellingBee');
+const SpellingBee = require('./library/SpellingBee');
 
 // Read the dictionary file from the disk of my mac
 // Set a variable 'dict' to its contents as a map

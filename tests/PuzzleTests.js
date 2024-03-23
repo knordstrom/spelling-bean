@@ -3,8 +3,8 @@ const exp = require("constants");
 //import a BDD style assertion library
 const expect = require("chai").expect;
 //import the Word module
-const Word = require("../Word");
-const Puzzle = require("../Puzzle");
+const Word = require("../library/Word");
+const Puzzle = require("../library/Puzzle");
 
 let dictionary = ["hello", "goodbye", "propaganda", "grandpop", "papa", "dad", "mom", "mama", "dog", "cat", "papaya"]
     .map(w => new Word(w))
