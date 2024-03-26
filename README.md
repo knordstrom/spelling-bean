@@ -3,7 +3,7 @@ A library to back and support the times' word game of a similar name.
 
 TODO: 
 
-    #. add an API to expose the functionality
+    1. add an API to expose the functionality
 
 To run tests, use`npm test` from the main directory.
 
