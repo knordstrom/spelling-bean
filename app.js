@@ -23,7 +23,6 @@ const Word = require('./library/Word');
 let DiskDict = function() {
     let fs = require('fs');
     return fs.readFileSync("./library/resources/words_alpha.txt", "utf-8").toLowerCase().split("\r\n")
-       // .reduce((map, word) => map.set(word, map), new Map());
 }
 
 const d = DiskDict();
@@ -57,13 +56,9 @@ app.get('/random', (req, res) => {
 app.get('/guess', (req, res) => {
     let key = req.query.key;
     let guess = req.query.guess;
-    console.log("key", key, pCache);
     let puzzle = pCache[key];
     if (puzzle == undefined) {
-
         puzzle = bee.randomPuzzle().fromFullKey(key);
-
-        console.log("puzzle", puzzle.solutions.map(w => w.value).slice(0,100), puzzle.solutions.map(w => w.value).slice(100));
         pCache[key] = puzzle;
     }
 
