@@ -4,7 +4,8 @@
 // In this case, the key is the word and the value is the word
 // The map is used to check if a word is in the dictionary
 
-const SpellingBee = require('./library/SpellingBee');
+const SpellingBee = require('./library/SpellingBee').SpellingBee;
+const Word = require('./library/Word');
 
 // Read the dictionary file from the disk of my mac
 // Set a variable 'dict' to its contents as a map
@@ -21,16 +22,60 @@ const SpellingBee = require('./library/SpellingBee');
 
 let DiskDict = function() {
     let fs = require('fs');
-    return fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n")
+    return fs.readFileSync("./library/resources/words_alpha.txt", "utf-8").toLowerCase().split("\r\n")
        // .reduce((map, word) => map.set(word, map), new Map());
 }
 
-new SpellingBee(DiskDict())
+const d = DiskDict();
+const bee = new SpellingBee(Array.from(d));
+
+//create an express application listening on port 3000
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("Server Listening on PORT:", PORT);
+});
+
+const pCache = {};
+
+
+//create a route that returns the baseWord of the puzzle
+app.get('/random', (req, res) => {
+    let puzzle = bee.randomPuzzle();
+    pCache[puzzle.key] = puzzle;
+    res.send(200,puzzle.key);
+});
+
+//create a route that reads a parameter "key" from the GET request and a paarameter "guess" from the GET request 
+// and makes a guess against the puzzle instance in pMap
+//if the guess is correct, return the points and the total points
+//if the guess is incorrect, return the points and the total points
+app.get('/guess', (req, res) => {
+    let key = req.query.key;
+    let guess = req.query.guess;
+    console.log("key", key, pCache);
+    let puzzle = pCache[key];
+    if (puzzle == undefined) {
+
+        puzzle = bee.randomPuzzle().fromFullKey(key);
+
+        console.log("puzzle", puzzle.solutions.map(w => w.value).slice(0,100), puzzle.solutions.map(w => w.value).slice(100));
+        pCache[key] = puzzle;
+    }
+
+    puzzle.guess(new Word(guess));
+    res.send(200,[puzzle.points, puzzle.totalPoints, puzzle.correctGuesses()]);
+});
 
 
 
 
 
+ 
 
 
 module.exports = {
