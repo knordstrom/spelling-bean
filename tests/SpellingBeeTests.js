@@ -54,4 +54,64 @@ describe("SpellingBee Tests", function() {
         expect(p.letterSet[5]).to.equal("p");
         expect(p.letterSet[6]).to.equal("r");
     })
+
+    //create a test case that asserts that a SpellingBee instance instantiated on ["hello", "goodbye", "propaganda"] has a property puzzleList that is an array of strings of length 1
+    it("should return an array of strings of length 1 for a SpellingBee instance instantiated on [\"hello\", \"goodbye\", \"propaganda\"]", function() {
+        let bee = new SpellingBee(["hello", "goodbye", "propaganda"]);
+
+        //assert that bee.puzzleList is an 
+        expect(Array.isArray(bee.puzzleList)).to.equal(true);
+        //assert that bee.puzzleList is an array of strings
+        expect(bee.puzzleList.every(element => typeof element === "string")).to.equal(true);
+        
+        //assert that bee.puzzleList has a length of 1
+        expect(bee.puzzleList.length).to.equal(1);
+        //assert that bee.puzzleList has a key of "propaganda"
+        expect(bee.puzzleList[0]).to.equal("adgnopr");
+
+        //assert that bee.puzzle("adgnopr") returns a Puzzle instance
+        expect(bee.puzzle("adgnopr", 0).baseWord.value).to.equal("propaganda");
+        //assert that bee.puzzle(0) returns a Puzzle instance
+        expect(bee.puzzle(0, 0).baseWord.value).to.equal("propaganda");
+    })
+
+    //create a test case to show that randomPuzzle returns a Puzzle instance with an index between 0 and 6
+    it("should return a Puzzle instance with an index between 0 and 6 for randomPuzzle", function() {
+        let bee = new SpellingBee(["hello", "goodbye", "propaganda"]);
+        let puzzle = bee.randomPuzzle();
+
+        //assert that bee.randomPuzzle() returns a Puzzle instance
+        expect(puzzle.baseWord instanceof Word).to.equal(true);
+        //assert that bee.randomPuzzle() returns a Puzzle instance with an index between 0 and 6
+        expect(puzzle.baseWord.value.indexOf(puzzle.requiredLetter)>=0).to.equal(true);
+    })
+
+    //create a test case with a SpellingBee created with two words having 7 unique letters showing that randomPuzzle returns a Puzzle instance with an index between 0 and 6
+    it("should return a Puzzle instance with one of two qualifying words for randomPuzzle", function() {
+        let bee = new SpellingBee(["hello", "goodbye", "propaganda", "bonfire"]);
+
+        expect(bee.puzzleList.length).to.equal(2);
+
+        let puzzle = bee.randomPuzzle();
+
+        //assert that bee.randomPuzzle() returns a Puzzle instance
+        expect(puzzle.baseWord instanceof Word).to.equal(true);
+
+        //assert that bee.randomPuzzle() returns a Puzzle instance with a baseWord of "propaganda" or "bonfire"
+        expect(puzzle.baseWord.value === "propaganda" || puzzle.baseWord.value === "bonfire").to.equal(true);
+
+        //assert that bee.randomPuzzle() returns a Puzzle instance with an index between 0 and 6
+        expect(puzzle.baseWord.value.indexOf(puzzle.requiredLetter)>=0).to.equal(true);
+
+
+        let pMap = {}
+        for (let i = 0; i < 1000; i++) {
+            let p = bee.randomPuzzle();
+            pMap[p.baseWord.value] = 1;
+        }
+
+        //assert that the keys in pMap are "propaganda" and "bonfire"
+        expect(Object.keys(pMap).includes("propaganda")).to.equal(true);
+        expect(Object.keys(pMap).includes("bonfire")).to.equal(true);
+    })
 })

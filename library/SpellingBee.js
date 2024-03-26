@@ -1,4 +1,5 @@
 const Word = require("./Word");
+const Puzzle = require("./Puzzle");
 
 let SpellingBee = function(stringList,c) {
 
@@ -20,10 +21,20 @@ let SpellingBee = function(stringList,c) {
     let pangramDict = new Map([...dict]
         .filter(entry => entry[0].length === size));
     
-    this.puzzleList = Object.keys(pangramDict.keys);
+    this.puzzleList = Array.from(pangramDict.keys());
 
     this.puzzle = function(key, index) {
+        //if the key is a number, use it as an index to the puzzleList
+        if (!isNaN(key)) {
+            key = this.puzzleList[key];
+        }
         return new Puzzle(pangramDict.get(key)[0], index, words);
+    }
+
+    this.randomPuzzle = function() {
+        let key = this.puzzleList[Math.floor(Math.random() * this.puzzleList.length)];
+        let index = Math.floor(Math.random() * size);
+        return this.puzzle(key, index);
     }
 
     this.tokenize = function(string) {
