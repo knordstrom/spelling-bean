@@ -1,8 +1,8 @@
 const Guess = require("./Guess");
+const Word = require("./Word");
 
 let Puzzle = function(baseWord, requiredLetterIndex, wordList) {
 
-    //console.log("creating puzzle with", baseWord, requiredLetterIndex, wordList);
 
     let getPoints = function(guess) {
         return (guess.isCorrect ? guess.word.value.length : 0)  
@@ -13,6 +13,15 @@ let Puzzle = function(baseWord, requiredLetterIndex, wordList) {
 
     //create a property 'requiredLetter' that is the letter at the index requiredLetterIndex of the baseWord value
     this.requiredLetter = baseWord.value[requiredLetterIndex];
+    this.requiredLetterIndex = requiredLetterIndex;
+
+    this.key = baseWord.letterSet.join("") + "|" + this.requiredLetter;
+
+    this.fromFullKey = function(fullKey) {
+        let parts = fullKey.split("|");
+        return new Puzzle(new Word(parts[0]), parts[0].indexOf(parts[1]), wordList);
+    }
+
     wordList = wordList || [];
 
     //create a method 'solutions' that takes a Set of strings and filters it on whetheer the letters in each string are a subset of letterSet
@@ -26,8 +35,7 @@ let Puzzle = function(baseWord, requiredLetterIndex, wordList) {
 
     this.correctGuesses = function() {
         return this.guesses
-            .filter(g => g.isCorrect)
-            .length;
+            .filter(g => g.isCorrect).map(g => g.word.value);
     }
 
     this.guess = function(word) {  

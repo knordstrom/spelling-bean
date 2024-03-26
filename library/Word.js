@@ -1,6 +1,6 @@
 let Word = function(string) {
     this.value = string;
-    this.letterSet = [...new Set(string.toLowerCase().split(""))].sort();
+    this.letterSet = [...new Set(this.value.toLowerCase().split(""))].sort();
 
     //create a property 'key' that is the sorted elements of letterSet sorted and joined into a string
     this.key = this.letterSet.join("");

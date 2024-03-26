@@ -51,29 +51,30 @@ describe("Puzzle Tests", function() {
 
         puzzle.guess(new Word("papa"));
         expect(puzzle.guesses.length).to.equal(1);
-        expect(puzzle.correctGuesses()).to.equal(0);
+        expect(puzzle.correctGuesses().length).to.equal(0);
         expect(puzzle.points).to.equal(0);
 
         //not in dictionary but could be created from baseWord
         puzzle.guess(new Word("poop"));
         expect(puzzle.guesses.length).to.equal(2);
-        expect(puzzle.correctGuesses()).to.equal(0);
+        expect(puzzle.correctGuesses().length).to.equal(0);
         expect(puzzle.points).to.equal(0);
 
         //not in dictionary and way off baseWord
         puzzle.guess(new Word("hagiography"));
         expect(puzzle.guesses.length).to.equal(3);
-        expect(puzzle.correctGuesses()).to.equal(0);
+        expect(puzzle.correctGuesses().length).to.equal(0);
         expect(puzzle.points).to.equal(0);
 
         puzzle.guess(new Word("propaganda"));
         expect(puzzle.guesses.length).to.equal(4);
-        expect(puzzle.correctGuesses()).to.equal(1);
+        expect(puzzle.correctGuesses().length).to.equal(1);
+        expect(puzzle.correctGuesses()).to.include("propaganda");
         expect(puzzle.points).to.equal(17);
 
         puzzle.guess(new Word("dad"));
         expect(puzzle.guesses.length).to.equal(5);
-        expect(puzzle.correctGuesses()).to.equal(1);
+        expect(puzzle.correctGuesses()).to.include("propaganda");
         expect(puzzle.points).to.equal(17);
 
         puzzle.guess(new Word("grandpop"));
@@ -83,6 +84,42 @@ describe("Puzzle Tests", function() {
         puzzle.guess(new Word("dog"));
         expect(puzzle.guesses.length).to.equal(7);
         expect(puzzle.points).to.equal(35);
+    });
+
+    let diskDict = (function() {
+        let fs = require('fs');
+        return fs.readFileSync("./library/resources/words_alpha.txt", "utf-8").toLowerCase().split("\r\n")
+    })().map(w => new Word(w))
+
+
+    //create a test case to show a Puzzle key is invertible using fromFullKey and the key property
+    it("should show that a Puzzle key is invertible using fromFullKey and the key property", function() {
+        let puzzle = new Puzzle(new Word("propaganda"), 2, diskDict);
+
+        let fullKey = puzzle.key;
+        let newPuzzle = puzzle.fromFullKey(fullKey);
+
+        expect(newPuzzle.key).to.equal(fullKey);
+    });
+
+    //create a test case using a real example from the game
+    it("should have a predictable points total for a Puzzle instantiated with 'disguised' and a dictionary from disk", function() {
+        let puzzle = new Puzzle(new Word("disguised"), 1, diskDict);
+
+        expect(puzzle.requiredLetter).to.equal("i");
+
+        expect(puzzle.pangrams).to.equal(6);
+        expect(puzzle.points).to.equal(0); 
+
+        puzzle.guess(new Word("propaganda"));
+        expect(puzzle.guesses.length).to.equal(1);
+        expect(puzzle.correctGuesses().length).to.equal(0);
+        expect(puzzle.points).to.equal(0);
+
+        puzzle.guess(new Word("disguised"));
+        expect(puzzle.correctGuesses().length).to.equal(1);
+        expect(puzzle.correctGuesses()).to.include("disguised");
+       
     });
 
 })

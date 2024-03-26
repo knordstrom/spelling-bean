@@ -7,11 +7,20 @@ let SpellingBee = function(stringList,c) {
     let size = config.size || 7;
 
     //create a variable dict that is a map with key value pairs of string to string taken from the argument d
-    let words = stringList.map(s => s.toLowerCase())
+    const words = stringList.map(s => s.toLowerCase())
         .map(s => new Word(s))
-    let dict = words
-        .reduce((map, word) => map.has(word.key) ? map.get(word.key).push(word) : map.set(word.key,[word]), new Map());
-    
+
+    const dict = (function() {
+        let m = new Map();
+        words.forEach(word => {
+            if (m.has(word.key)) {
+                m.get(word.key).push(word);
+            } else {
+                m.set(word.key, [word]);
+            }
+        });
+        return m;
+    })()
 
     //write a function that uses tokenize on dict to return a map of string to array of strings
     //the array of strings should contain the unique letters of the key

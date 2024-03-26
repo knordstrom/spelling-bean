@@ -114,4 +114,10 @@ describe("SpellingBee Tests", function() {
         expect(Object.keys(pMap).includes("propaganda")).to.equal(true);
         expect(Object.keys(pMap).includes("bonfire")).to.equal(true);
     })
+
+    it("should create a spelling bee object from the disk dictionary", function() {
+        let bee = new SpellingBee(Array.from(require("fs").readFileSync("/usr/share/dict/words").toString().split("\n")));
+        console.log(bee.puzzleList);
+
+    });
 })
