@@ -16,7 +16,7 @@ All files       |     100 |       95 |     100 |     100 |
 ----------------|---------|----------|---------|---------|-------------------
 
 
-To access the API (and thus play the game), there are presently two endpoints:
+To access the API (and thus play the game), execute `npm start`. The API runs on localhost:3000 by default and there are presently two endpoints:
 
 * `/random`        Returns the key of a randomly selected game from the dictionary
 * `/guess?key=[KEY]&guess=[WORD_BEING_GUESSED]`  Plays the game with key KEY by guessing WORD_BEING_GUESSED
